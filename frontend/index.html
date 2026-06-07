@@ -517,7 +517,8 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-function fmt(n) { return '$' + parseFloat(n).toFixed(2); }
+let CURRENCY_SYMBOL = '$';
+function fmt(n) { return CURRENCY_SYMBOL + parseFloat(n).toFixed(2); }
 function pctStr(p) { return (p >= 0 ? '▲ +' : '▼ ') + p + '%'; }
 function pctClass(p) { return p >= 0 ? 'up' : 'down'; }
 function showError(msg) { const el = document.getElementById('errorBox'); el.textContent = '⚠ ' + msg; el.classList.remove('hidden'); }
@@ -868,6 +869,7 @@ async function runPrediction() {
     if (data.error) { showError(data.error); return; }
     globalData = data;
     const { current_price, history, forecast, metrics, company, model_used } = data;
+    CURRENCY_SYMBOL = company.currency_symbol || '$';
     const { price_7d, pct_7d, price_30d, pct_30d, signal, rmse, mape } = metrics;
     const infoRow = document.getElementById('infoRow');
     infoRow.innerHTML =

@@ -33,6 +33,13 @@ def get_stock_data(ticker, period="1y"):
 def get_company_info(ticker):
     try:
         info = yf.Ticker(ticker).info
+        currency = info.get("currency", "USD")
+        symbols = {
+            "USD": "$", "INR": "₹", "EUR": "€", "GBP": "£",
+            "JPY": "¥", "CNY": "¥", "HKD": "HK$", "CAD": "C$",
+            "AUD": "A$", "SGD": "S$", "KRW": "₩", "BRL": "R$",
+            "MXN": "MX$", "CHF": "Fr", "SEK": "kr", "NOK": "kr"
+        }
         return {
             "name": info.get("longName", ticker),
             "sector": info.get("sector", "N/A"),
@@ -40,6 +47,8 @@ def get_company_info(ticker):
             "pe_ratio": info.get("trailingPE", None),
             "52w_high": info.get("fiftyTwoWeekHigh", None),
             "52w_low": info.get("fiftyTwoWeekLow", None),
+            "currency": currency,
+            "currency_symbol": symbols.get(currency, currency + " "),
         }
     except Exception:
         return {"name": ticker}
