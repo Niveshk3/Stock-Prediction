@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: stock-prediction-api
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: FLASK_ENV
+        value: production
+      - key: OPENROUTER_API_KEY
+        value: set-this-in-render-dashboard
+
+  - type: static
+    name: stock-prediction-ui
+    rootDir: frontend
+    staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://stock-prediction-api.onrender.com/*
